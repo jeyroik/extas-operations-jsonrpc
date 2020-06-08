@@ -1,6 +1,7 @@
 <?php
 namespace tests;
 
+use extas\components\repositories\TSnuffRepository;
 use extas\interfaces\samples\parameters\ISampleParameter;
 
 use extas\components\items\SnuffRepository;
@@ -18,11 +19,19 @@ use PHPUnit\Framework\TestCase;
  */
 class JsonRpcOperationTest extends TestCase
 {
+    use TSnuffRepository;
+
     protected function setUp(): void
     {
         parent::setUp();
         $env = Dotenv::create(getcwd() . '/tests/');
         $env->load();
+        $this->registerSnuffRepos([]);
+    }
+
+    protected function tearDown(): void
+    {
+        $this->unregisterSnuffRepos();
     }
 
     public function testBasicLogic()
@@ -39,7 +48,7 @@ class JsonRpcOperationTest extends TestCase
                 ],
                 JsonRpcOperation::PARAM__ITEM_REPOSITORY => [
                     ISampleParameter::FIELD__NAME => JsonRpcOperation::PARAM__ITEM_REPOSITORY,
-                    ISampleParameter::FIELD__VALUE => SnuffRepository::class
+                    ISampleParameter::FIELD__VALUE => 'snuffRepository'
                 ],
                 JsonRpcOperation::PARAM__METHOD => [
                     ISampleParameter::FIELD__NAME => JsonRpcOperation::PARAM__METHOD,
@@ -51,7 +60,7 @@ class JsonRpcOperationTest extends TestCase
         $this->assertEquals('test', $op->getItemName());
         $this->assertEquals(PluginEmpty::class, $op->getItemClass());
         $this->assertInstanceOf(PluginEmpty::class, $op->buildItem());
-        $this->assertEquals(SnuffRepository::class, $op->getItemRepositoryName());
+        $this->assertEquals('snuffRepository', $op->getItemRepositoryName());
         $this->assertInstanceOf(SnuffRepository::class, $op->getItemRepository());
         $this->assertEquals('test', $op->getMethod());
     }
