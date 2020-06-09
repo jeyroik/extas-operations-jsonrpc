@@ -1,4 +1,18 @@
 {
   "name": "extas/operations-jsonrpc",
-  "installer_version": 3
+  "installer_version": 3,
+  "package_classes": [
+    {
+      "interface": "jsonRpcOperationRepository",
+      "class": "extas\\components\\operations\\JsonRpcOperationRepository"
+    }
+  ],
+  "extensions": [
+    {
+      "class": "extas\\components\\extensions\\ExtensionRepositoryGet",
+      "interface": "extas\\interfaces\\extensions\\IExtensionRepositoryGet",
+      "subject": "*",
+      "methods": ["jsonRpcOperationRepository"]
+    }
+  ]
 }
