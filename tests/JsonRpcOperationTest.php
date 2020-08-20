@@ -2,6 +2,7 @@
 namespace tests;
 
 use extas\components\repositories\TSnuffRepository;
+use extas\components\repositories\TSnuffRepositoryDynamic;
 use extas\interfaces\samples\parameters\ISampleParameter;
 
 use extas\components\items\SnuffRepository;
@@ -19,19 +20,19 @@ use PHPUnit\Framework\TestCase;
  */
 class JsonRpcOperationTest extends TestCase
 {
-    use TSnuffRepository;
+    use TSnuffRepositoryDynamic;
 
     protected function setUp(): void
     {
         parent::setUp();
         $env = Dotenv::create(getcwd() . '/tests/');
         $env->load();
-        $this->registerSnuffRepos([]);
+        $this->createSnuffDynamicRepositories([]);
     }
 
     protected function tearDown(): void
     {
-        $this->unregisterSnuffRepos();
+        $this->deleteSnuffDynamicRepositories();
     }
 
     public function testBasicLogic()
