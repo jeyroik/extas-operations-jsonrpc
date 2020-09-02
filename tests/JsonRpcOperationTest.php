@@ -1,6 +1,8 @@
 <?php
 namespace tests;
 
+use extas\components\operations\jsonrpc\Specs;
+use extas\components\operations\jsonrpc\specs\SpecsProperty;
 use extas\components\repositories\TSnuffRepository;
 use extas\components\repositories\TSnuffRepositoryDynamic;
 use extas\interfaces\samples\parameters\ISampleParameter;
@@ -64,5 +66,91 @@ class JsonRpcOperationTest extends TestCase
         $this->assertEquals('snuffRepository', $op->getItemRepositoryName());
         $this->assertInstanceOf(SnuffRepository::class, $op->getItemRepository());
         $this->assertEquals('test', $op->getMethod());
+    }
+
+    public function testSpecs()
+    {
+        $op = new JsonRpcOperation([
+            JsonRpcOperation::FIELD__SPECS => [
+                'request' => [
+                    'type' => 'object',
+                    'properties' => [
+
+                    ]
+                ],
+                'response' => [
+                    'type' => 'object',
+                    'properties'
+                ]
+            ]
+        ]);
+
+        $specs = new Specs();
+        $request = new SpecsProperty([
+            SpecsProperty::FIELD__NAME => 'request',
+            SpecsProperty::FIELD__TYPE => 'object',
+            SpecsProperty::FIELD__PROPERTIES => []
+        ]);
+        $request->addProperty(new SpecsProperty([
+            SpecsProperty::FIELD__NAME => 'test',
+            SpecsProperty::FIELD__TYPE => 'string'
+        ]));
+        $request->setProperty('custom', [
+            'arg1' => 'val1'
+        ]);
+
+        $response = new SpecsProperty([
+            SpecsProperty::FIELD__NAME => 'response',
+            SpecsProperty::FIELD__TYPE => 'object',
+            SpecsProperty::FIELD__PROPERTIES => []
+        ]);
+
+        $specs->setRequest($request)->setResponse($response);
+
+        $this->assertEquals(
+            [
+                'type' => 'object',
+                'properties' => [
+                    'test' => [
+                        'type' => 'string'
+                    ],
+                    'custom' => [
+                        'arg1' => 'val1'
+                    ]
+                ]
+            ],
+            $specs->getRequest()->__toArray(),
+            'Incorrect request: ' . print_r($specs->getRequest()->__toArray(), true)
+        );
+        $this->assertEquals(
+            [
+                'type' => 'object',
+                'properties' => []
+            ],
+            $specs->getResponse()->__toArray(),
+            'Incorrect response: ' . print_r($specs->getResponse()->__toArray(), true)
+        );
+
+        $this->assertEquals(
+            [
+                'request' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'test' => [
+                            'type' => 'string'
+                        ],
+                        'custom' => [
+                            'arg1' => 'val1'
+                        ]
+                    ]
+                ],
+                'response' => [
+                    'type' => 'object',
+                    'properties' => []
+                ]
+            ],
+            $specs->__toArray(),
+            'Incorrect specs:' . print_r($specs->__toArray(), true)
+        );
     }
 }

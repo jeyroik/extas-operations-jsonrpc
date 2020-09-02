@@ -1,6 +1,7 @@
 <?php
 namespace extas\interfaces\operations;
 
+use extas\interfaces\operations\jsonrpc\ISpecs;
 use extas\interfaces\repositories\IRepository;
 
 /**
@@ -46,4 +47,15 @@ interface IJsonRpcOperation extends IOperation
      * @return string
      */
     public function getMethod(): string;
+
+    /**
+     * @return ISpecs
+     */
+    public function getSpecsAsObject(): ISpecs;
+
+    /**
+     * @param ISpecs $specs
+     * @return $this
+     */
+    public function setSpecsFromObject(ISpecs $specs);
 }

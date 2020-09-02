@@ -1,7 +1,9 @@
 <?php
 namespace extas\components\operations;
 
+use extas\components\operations\jsonrpc\Specs;
 use extas\interfaces\operations\IJsonRpcOperation;
+use extas\interfaces\operations\jsonrpc\ISpecs;
 use extas\interfaces\repositories\IRepository;
 
 /**
@@ -63,5 +65,24 @@ class JsonRpcOperation extends Operation implements IJsonRpcOperation
     public function getMethod(): string
     {
         return $this->getParameterValue(static::PARAM__METHOD, '');
+    }
+
+    /**
+     * @return ISpecs
+     */
+    public function getSpecsAsObject(): ISpecs
+    {
+        return new Specs($this->getSpecs());
+    }
+
+    /**
+     * @param ISpecs $specs
+     * @return $this|JsonRpcOperation
+     */
+    public function setSpecsFromObject(ISpecs $specs)
+    {
+        $this->setSpecs($specs->__toArray());
+
+        return $this;
     }
 }
