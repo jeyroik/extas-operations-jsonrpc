@@ -70,20 +70,7 @@ class JsonRpcOperationTest extends TestCase
 
     public function testSpecs()
     {
-        $op = new JsonRpcOperation([
-            JsonRpcOperation::FIELD__SPECS => [
-                'request' => [
-                    'type' => 'object',
-                    'properties' => [
-
-                    ]
-                ],
-                'response' => [
-                    'type' => 'object',
-                    'properties'
-                ]
-            ]
-        ]);
+        $op = new JsonRpcOperation();
 
         $specs = new Specs();
         $request = new SpecsProperty([
@@ -151,6 +138,52 @@ class JsonRpcOperationTest extends TestCase
             ],
             $specs->__toArray(),
             'Incorrect specs:' . print_r($specs->__toArray(), true)
+        );
+
+        $op->setSpecsFromObject($specs);
+        $this->assertEquals(
+            [
+                'request' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'test' => [
+                            'type' => 'string'
+                        ],
+                        'custom' => [
+                            'arg1' => 'val1'
+                        ]
+                    ]
+                ],
+                'response' => [
+                    'type' => 'object',
+                    'properties' => []
+                ]
+            ],
+            $op->getSpecsAsObject()->__toArray(),
+            'Incorrect specs:' . print_r($specs->__toArray(), true)
+        );
+
+        $this->assertEquals(
+            [
+                'specs' => [
+                    'request' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'test' => [
+                                'type' => 'string'
+                            ],
+                            'custom' => [
+                                'arg1' => 'val1'
+                            ]
+                        ]
+                    ],
+                    'response' => [
+                        'type' => 'object',
+                        'properties' => []
+                    ]
+                ]
+            ],
+            $op->__toArray()
         );
     }
 }
