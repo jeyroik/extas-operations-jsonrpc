@@ -186,4 +186,17 @@ class JsonRpcOperationTest extends TestCase
             $op->__toArray()
         );
     }
+
+    public function testAlreadyExistedProperty()
+    {
+        $prop = new SpecsProperty();
+        $prop->addProperty(new SpecsProperty([
+            SpecsProperty::FIELD__NAME => 'test'
+        ]));
+
+        $this->expectExceptionMessage('Property "test" already exist');
+        $prop->addProperty(new SpecsProperty([
+            SpecsProperty::FIELD__NAME => 'test'
+        ]));
+    }
 }
