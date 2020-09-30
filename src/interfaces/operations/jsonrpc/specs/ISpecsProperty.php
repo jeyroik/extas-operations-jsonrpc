@@ -40,4 +40,10 @@ interface ISpecsProperty extends IItem, IHasName, IHasType
      * @return $this
      */
     public function setProperty(string $name, array $value);
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasProperty(string $name): bool;
 }

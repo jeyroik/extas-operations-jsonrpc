@@ -83,6 +83,15 @@ class SpecsProperty extends Item implements ISpecsProperty
     }
 
     /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasProperty(string $name): bool
+    {
+        return isset($this->getProperties()[$name]);
+    }
+
+    /**
      * @return string
      */
     protected function getSubjectForExtension(): string
