@@ -82,6 +82,7 @@ class JsonRpcOperationTest extends TestCase
             SpecsProperty::FIELD__NAME => 'test',
             SpecsProperty::FIELD__TYPE => 'string'
         ]));
+        $this->assertTrue($request->hasProperty('test'));
         $request->setProperty('custom', [
             'arg1' => 'val1'
         ]);
